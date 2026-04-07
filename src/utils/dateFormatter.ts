@@ -1,11 +1,11 @@
-import { format, differenceInHours, differenceInDays } from "date-fns";
+import dayjs from "dayjs";
 
 export const dateFormatter = (date: string, type = "short" as string) => {
   if (!date) return null;
   if (date && type === "short") {
-    return format(new Date(date), "MMM d, yyyy");
+    return dayjs(date).format("MMM D, YYYY");
   }
-  return format(new Date(date), "MMM d, yyyy h:mm a");
+  return dayjs(date).format("MMM D, YYYY h:mm A");
 };
 
 /**
@@ -15,14 +15,13 @@ export const dateFormatter = (date: string, type = "short" as string) => {
  */
 export const calculateTimeDifference = (date: string): string => {
   if (!date) return "0 hours";
-  const now = new Date();
-  const targetDate = new Date(date);
-  const hoursDiff = differenceInHours(targetDate, now);
+  const now = dayjs();
+  const targetDate = dayjs(date);
+  const hoursDiff = targetDate.diff(now, "hour");
 
   // If absolute difference is greater than 72 hours, return days
   if (Math.abs(hoursDiff) > 72) {
-    const daysDiff = differenceInDays(targetDate, now);
-    return `${Math.abs(daysDiff)} day${Math.abs(daysDiff) > 1 ? "s" : ""}`;
+    return `${Math.abs(targetDate.diff(now, "day"))} day${Math.abs(targetDate.diff(now, "day")) > 1 ? "s" : ""}`;
   }
 
   // Otherwise return hours
