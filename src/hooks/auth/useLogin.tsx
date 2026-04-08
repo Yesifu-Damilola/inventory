@@ -14,32 +14,31 @@ export const useLogin = () => {
   const { isPending, mutate } = useMutation({
     mutationFn: authApi.signIn,
     onSuccess: (data) => {
-        if (data?.success) {
-          setAuth({
-            accessToken: data?.data?.token,
-            user: data?.data?.user,
-          });
-
-          queryClient.setQueryData(["user-me"], {
-            message: data?.message,
-            data: data?.data?.user,
-          });
-
-          const successMsg =
-            data?.message?.trim() || "Logged in successfully";
-          showToast({
-            type: "SUCCESS",
-            msg: successMsg,
-          });
-          router.replace("/dashboard");
-          return;
-        }
-
-        showToast({
-          type: "ERROR",
-          msg: data?.message || "Login failed. Please try again.",
+      if (data?.success) {
+        setAuth({
+          accessToken: data?.data?.token,
+          user: data?.data?.user,
         });
-      },
+
+        queryClient.setQueryData(["user-me"], {
+          message: data?.message,
+          data: data?.data?.user,
+        });
+
+        const successMsg = data?.message?.trim() || "Logged in successfully";
+        showToast({
+          type: "SUCCESS",
+          msg: successMsg,
+        });
+        router.replace("/dashboard");
+        return;
+      }
+
+      showToast({
+        type: "ERROR",
+        msg: data?.message || "Login failed. Please try again.",
+      });
+    },
     onError: (error: any) => {
       const responseCode = error?.response?.data?.responseCode;
       const statusCode = error?.response?.data?.statusCode;

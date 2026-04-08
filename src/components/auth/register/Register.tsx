@@ -11,7 +11,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { useSignUp } from "@/hooks/auth/useSignUp";
 
 const Register = () => {
-  const { control, handleSubmit, onSubmit, isPending } = useSignUp();
+  const { control, handleSubmit, onSubmit, isPending, errors } = useSignUp();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
  
@@ -38,10 +38,14 @@ const Register = () => {
                   type="text"
                   placeholder="Full Name"
                   disabled={isPending}
+                  aria-invalid={!!errors.name}
                   {...field}
                 />
               )}
             />
+            {errors.name?.message ? (
+              <p className="text-sm text-destructive mt-1">{errors.name.message}</p>
+            ) : null}
           </div>
 
           <div>
@@ -54,10 +58,14 @@ const Register = () => {
                   type="email"
                   placeholder="you@example.com"
                   disabled={isPending}
+                  aria-invalid={!!errors.email}
                   {...field}
                 />
               )}
             />
+            {errors.email?.message ? (
+              <p className="text-sm text-destructive mt-1">{errors.email.message}</p>
+            ) : null}
           </div>
 
           <div>
@@ -72,6 +80,7 @@ const Register = () => {
                     placeholder="Create a Password"
                     disabled={isPending}
                     className="pr-10"
+                    aria-invalid={!!errors.password}
                     {...field}
                   />
                   <button
@@ -90,6 +99,9 @@ const Register = () => {
                 </div>
               )}
             />
+            {errors.password?.message ? (
+              <p className="text-sm text-destructive mt-1">{errors.password.message}</p>
+            ) : null}
           </div>
 
           <div>
@@ -106,6 +118,7 @@ const Register = () => {
                     placeholder="Confirm Password"
                     disabled={isPending}
                     className="pr-10"
+                    aria-invalid={!!errors.confirmPassword}
                     {...field}
                   />
                   <button
@@ -128,10 +141,42 @@ const Register = () => {
                 </div>
               )}
             />
+            {errors.confirmPassword?.message ? (
+              <p className="text-sm text-destructive mt-1">
+                {errors.confirmPassword.message}
+              </p>
+            ) : null}
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              Register as
+            </label>
+            <Controller
+              name="role"
+              control={control}
+              render={({ field }) => {
+                const { ref: _ref, ...fieldProps } = field;
+                return (
+                  <select
+                    {...fieldProps}
+                    disabled={isPending}
+                    aria-invalid={!!errors.role}
+                    className="w-full px-3 py-2 rounded-md border border-input bg-background text-foreground disabled:opacity-50"
+                  >
+                    <option value="user">User</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                );
+              }}
+            />
+            {errors.role?.message ? (
+              <p className="text-sm text-destructive mt-1">{errors.role.message}</p>
+            ) : null}
           </div>
 
           <Button type="submit" className="w-full" disabled={isPending}>
-            {isPending? (
+            {isPending ? (
               <div className="flex items-center gap-2">
                 <Spinner className="h-4 w-4" />
                 Creating account...

@@ -103,7 +103,7 @@ const Categories = () => {
         </Button>
       </div>
 
-      <div className="rounded-lg border border-border overflow-hidden">
+      <div className="rounded-lg border border-border l overflow-x-auto">
         <table className="w-full">
           <thead className="bg-secondary">
             <tr>

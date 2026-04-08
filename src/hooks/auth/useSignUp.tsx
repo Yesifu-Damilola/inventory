@@ -3,7 +3,7 @@ import { showToast } from "@/utils/toastConfig";
 import { SignUpResponse } from "@/types/user";
 import { useAuthStore } from "@/zustand/useAuthStore";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import authApi from "@/services/api/auth";
@@ -18,9 +18,9 @@ type SignUpPayload = {
 
 export const useSignUp = () => {
   const router = useRouter();
-  const { setAuth } = useAuthStore();
+  const queryClient = useQueryClient();
+  const setAuth = useAuthStore((state) => state.setAuth);
 
-  // ✅ Setup mutation for signup API
   const { isPending, mutate } = useMutation<
     SignUpResponse,
     Error,
@@ -28,15 +28,27 @@ export const useSignUp = () => {
   >({
     mutationFn: authApi.signUp,
     onSuccess: (data) => {
+      if (data?.success) {
+        setAuth({
+          accessToken: data.data.token,
+          user: data.data.user,
+        });
+        queryClient.setQueryData(["user-me"], {
+          message: data.message,
+          data: data.data.user,
+        });
+        showToast({
+          type: "SUCCESS",
+          msg: data.message?.trim() || "Account created successfully!",
+        });
+        router.replace("/dashboard");
+        return;
+      }
+
       showToast({
-        type: "SUCCESS",
-        msg: data?.message || "Account created successfully!",
+        type: "ERROR",
+        msg: data?.message || "Signup failed. Please try again.",
       });
-      console.log(mutate);
-      setAuth({
-        accessToken: data?.data?.token,
-      }); // Save user data to Zustand store
-      return router.push("/");
     },
 
     onError: (error) => {
@@ -52,8 +64,7 @@ export const useSignUp = () => {
     },
   });
 
-  // ✅ React Hook Form configuration
-  const { control, handleSubmit } = useForm<SignupSchemaType>({
+  const { control, handleSubmit, formState } = useForm<SignupSchemaType>({
     defaultValues: {
       name: "",
       email: "",
@@ -81,5 +92,6 @@ export const useSignUp = () => {
     handleSubmit,
     onSubmit,
     isPending,
+    errors: formState.errors,
   };
 };

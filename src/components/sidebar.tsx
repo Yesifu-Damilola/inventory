@@ -1,18 +1,23 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut, Loader2 } from "lucide-react";
 import { useAuth } from "@/providers";
-import { cn } from "../../src/lib/utils";
+import { cn } from "@/lib/utils";
 import { accountItems, navItems } from "./constant/navItems";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
-export function Sidebar() {
+const shellClass =
+  "w-64 bg-card border-border h-screen flex flex-col shrink-0";
+
+function SidebarInner({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   const { logout, isAdmin, isPending } = useAuth();
 
   return (
-    <div className="w-64 bg-card border-r border-border h-screen flex flex-col">
+    <>
       <div className="p-6 border-b border-border">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold bg-linear-to-br from-primary to-accent bg-clip-text text-transparent">
@@ -39,6 +44,7 @@ export function Sidebar() {
               <Link
                 key={item.href}
                 href={item.href}
+                onClick={() => onNavigate?.()}
                 className={cn(
                   "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
                   isActive
@@ -68,6 +74,7 @@ export function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
+              onClick={() => onNavigate?.()}
               className={cn(
                 "flex items-center gap-3 px-4 py-3 rounded-lg transition-colors",
                 isActive
@@ -84,7 +91,10 @@ export function Sidebar() {
         <div className="border-t border-border p-4">
           <button
             type="button"
-            onClick={() => void logout()}
+            onClick={() => {
+              onNavigate?.();
+              void logout();
+            }}
             disabled={isPending}
             className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-destructive hover:bg-destructive/10 transition-colors disabled:pointer-events-none disabled:opacity-60"
           >
@@ -97,6 +107,47 @@ export function Sidebar() {
           </button>
         </div>
       </div>
-    </div>
+    </>
+  );
+}
+
+type SidebarProps = {
+  mobileOpen: boolean;
+  onMobileOpenChange: (open: boolean) => void;
+};
+
+export function Sidebar({ mobileOpen, onMobileOpenChange }: SidebarProps) {
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 768px)");
+    const closeIfDesktop = () => {
+      if (mq.matches) onMobileOpenChange(false);
+    };
+    mq.addEventListener("change", closeIfDesktop);
+    closeIfDesktop();
+    return () => mq.removeEventListener("change", closeIfDesktop);
+  }, [onMobileOpenChange]);
+
+  return (
+    <>
+      <Sheet open={mobileOpen} onOpenChange={onMobileOpenChange}>
+        <SheetContent
+          side="left"
+          className="p-0 gap-0 w-64 max-w-[85vw] border-r border-border bg-card [&>button]:text-foreground"
+        >
+          <SheetTitle className="sr-only">Main navigation</SheetTitle>
+          <div className={cn(shellClass, "border-r-0 h-full")}>
+            <SidebarInner
+              onNavigate={() => {
+                onMobileOpenChange(false);
+              }}
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      <aside className={cn(shellClass, "hidden md:flex border-r")}>
+        <SidebarInner />
+      </aside>
+    </>
   );
 }

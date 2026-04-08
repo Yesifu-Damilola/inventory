@@ -1,11 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Plus, Trash2, Edit2, Eye, Loader2 } from "lucide-react";
+import { Plus, Trash2, Edit2, Eye, Loader2, Lock } from "lucide-react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useQueryClient } from "@tanstack/react-query";
 import { Modal } from "@/components/modal";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -20,9 +19,10 @@ import { dateFormatter } from "@/utils/dateFormatter";
 import { GetAllUnitsMeasuresData } from "@/types/unitsMeasure";
 import { useUpdateUnitMeasure } from "@/hooks/unitsMeasure/useUpdateUnitMeasure";
 import { useDeleteUnitsMeasure } from "@/hooks/unitsMeasure/useDeleteUnitsMeasure";
+import { useAuth } from "@/providers";
 
 const Units = () => {
-  const queryClient = useQueryClient();
+  const { isAdmin } = useAuth();
   const [showModal, setShowModal] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -99,14 +99,20 @@ const Units = () => {
           <p className="text-muted-foreground">
             Manage measurement units for products
           </p>
+          {!isAdmin && (
+            <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
+              <Lock className="w-4 h-4" /> Admin access required to add, edit,
+              or delete units
+            </p>
+          )}
         </div>
-        <Button onClick={() => handleOpenModal()}>
+        <Button onClick={() => handleOpenModal()} disabled={!isAdmin}>
           <Plus className="w-4 h-4 mr-2" />
           Add Unit
         </Button>
       </div>
 
-      <div className="rounded-lg border border-border overflow-hidden">
+      <div className="rounded-lg border border-border overflow-x-auto">
         <table className="w-full">
           <thead className="bg-secondary">
             <tr>
@@ -169,27 +175,36 @@ const Units = () => {
                         <Eye className="w-4 h-4" />
                       </Button>
                     </Link>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleOpenModal(unit)}
-                      disabled={isUpdating}
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      disabled={isDeletingUnitsMeasure}
-                      onClick={() => setDeleteConfirm(unit.id)}
-                      className="text-destructive"
-                    >
-                      {isDeletingUnitsMeasure && deletingId === unit.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
-                      ) : (
-                        <Trash2 className="w-4 h-4" />
-                      )}
-                    </Button>
+                    {isAdmin ? (
+                      <>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleOpenModal(unit)}
+                          disabled={isUpdating}
+                        >
+                          <Edit2 className="w-4 h-4" />
+                        </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          disabled={isDeletingUnitsMeasure}
+                          onClick={() => setDeleteConfirm(unit.id)}
+                          className="text-destructive"
+                        >
+                          {isDeletingUnitsMeasure &&
+                          deletingId === unit.id ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            <Trash2 className="w-4 h-4" />
+                          )}
+                        </Button>
+                      </>
+                    ) : (
+                      <span className="text-xs text-muted-foreground flex items-center gap-1">
+                        <Lock className="w-3 h-3" /> Admin only
+                      </span>
+                    )}
                   </div>
                 </td>
               </tr>

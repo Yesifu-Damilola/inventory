@@ -23,6 +23,9 @@ const toLowStockRows = (products: Product[]): LowStockProductRow[] =>
     reorder_level: Number(product.reorder_level ?? 0),
     created_at: "",
     quantity_on_hand: Number(product.stock_level?.quantity_on_hand ?? 0),
+    category_name: String(product.category?.name ?? ""),
+    unit_name: String(product.unit_of_measure?.name ?? ""),
+    unit_abbreviation: String(product.unit_of_measure?.abbreviation ?? ""),
   }));
 
 type UseGetLowStockProductsOptions = {

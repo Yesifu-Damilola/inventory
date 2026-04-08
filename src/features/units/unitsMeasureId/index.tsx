@@ -9,6 +9,7 @@ import { Modal } from "@/components/modal";
 import { useAuth } from "@/providers";
 import Link from "next/link";
 import { useGetUnitsMeasureById } from "@/hooks/unitsMeasure/useGetUnitsmeasureById";
+import { useDeleteUnitsMeasure } from "@/hooks/unitsMeasure/useDeleteUnitsMeasure";
 import { dateFormatter } from "@/utils/dateFormatter";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { GetAllUnitsMeasuresData } from "@/types/unitsMeasure";
@@ -21,6 +22,10 @@ export default function UnitsMeasureDetails() {
 
   const { unitsMeasure, isPending, error } =
     useGetUnitsMeasureById(unitsMeasureId);
+  const { onSubmit: onDeleteSubmit, isPending: isDeleting } =
+    useDeleteUnitsMeasure({
+      onSuccess: () => router.push("/units"),
+    });
   const unitData =
     (unitsMeasure as { data?: GetAllUnitsMeasuresData } | undefined)?.data ??
     (unitsMeasure as GetAllUnitsMeasuresData | undefined);
@@ -109,14 +114,8 @@ export default function UnitsMeasureDetails() {
     }
   };
 
-  const handleDelete = async () => {
-    try {
-      // Mock delete — wire to DELETE when available
-      await new Promise((resolve) => setTimeout(resolve, 300));
-      router.push("/units");
-    } catch (err) {
-      console.error("Failed to delete unit of measure:", err);
-    }
+  const handleDelete = () => {
+    onDeleteSubmit(unitsMeasureId);
   };
 
   return (
@@ -280,8 +279,12 @@ export default function UnitsMeasureDetails() {
               >
                 Cancel
               </Button>
-              <Button variant="destructive" onClick={handleDelete}>
-                Delete unit
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? "Deleting..." : "Delete unit"}
               </Button>
             </div>
           </div>

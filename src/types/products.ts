@@ -139,6 +139,9 @@ export interface ProductRow {
 /** List row for low-stock alerts (includes current quantity for comparison). */
 export interface LowStockProductRow extends ProductRow {
   quantity_on_hand: number;
+  category_name: string;
+  unit_name: string;
+  unit_abbreviation: string;
 }
 
 export interface GetLowStockProductsResponse {

@@ -3,7 +3,13 @@ import { DeleteUnitMeasureResponse } from "@/types/unitsMeasure";
 import { showToast } from "@/utils/toastConfig";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
-export const useDeleteUnitsMeasure = () => {
+type UseDeleteUnitsMeasureOptions = {
+  onSuccess?: (data: DeleteUnitMeasureResponse) => void;
+};
+
+export const useDeleteUnitsMeasure = (
+  options?: UseDeleteUnitsMeasureOptions,
+) => {
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation<
     DeleteUnitMeasureResponse,
@@ -16,9 +22,26 @@ export const useDeleteUnitsMeasure = () => {
       queryClient.invalidateQueries({
         queryKey: ["unitsMeasures"],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["unitsMeasure"],
+      });
       showToast({
         type: "SUCCESS",
         msg: data?.message || "Unit measure deleted successfully",
+      });
+      options?.onSuccess?.(data);
+    },
+    onError: (error: unknown) => {
+      const err = error as {
+        response?: { data?: { message?: string } };
+        message?: string;
+      };
+      showToast({
+        type: "ERROR",
+        msg:
+          err?.response?.data?.message ||
+          err?.message ||
+          "Failed to delete unit measure",
       });
     },
   });

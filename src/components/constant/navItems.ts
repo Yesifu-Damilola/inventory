@@ -51,12 +51,12 @@ export const navItems = [
     icon: TrendingUp,
     adminOnly: true,
   },
-  // {
-  //   label: "Low Stock Alerts",
-  //   href: "/low-stock",
-  //   icon: AlertCircle,
-  //   adminOnly: false,
-  // },
+  {
+    label: "Low Stock Alerts",
+    href: "/low-stock",
+    icon: AlertCircle,
+    adminOnly: false,
+  },
 ];
 
 export const accountItems = [

@@ -320,7 +320,7 @@ const Products = () => {
       {/* TABLE */}
       {isAdmin && (
         <div className="space-y-4">
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-4">
+          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             <Input
               placeholder="Search products..."
               value={searchTerm}
@@ -331,7 +331,7 @@ const Products = () => {
               value={selectedCategoryId}
               onValueChange={setSelectedCategoryId}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Filter by category" />
               </SelectTrigger>
               <SelectContent>
@@ -348,7 +348,7 @@ const Products = () => {
               value={selectedSupplierId}
               onValueChange={setSelectedSupplierId}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Filter by supplier" />
               </SelectTrigger>
               <SelectContent>
@@ -365,7 +365,7 @@ const Products = () => {
               value={String(perPage)}
               onValueChange={(value) => setPerPage(Number(value))}
             >
-              <SelectTrigger>
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Per page" />
               </SelectTrigger>
               <SelectContent>
