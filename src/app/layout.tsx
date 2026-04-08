@@ -10,23 +10,23 @@ const _geistMono = Geist_Mono({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Inventory Management | System",
   description: "Restaurant inventory management system",
-  generator: "v0.app",
+  generator: "Inventory Management System",
   icons: {
     icon: [
       {
-        url: "/icon-light-32x32.png",
+        url: "/inventory-logo.png",
         media: "(prefers-color-scheme: light)",
       },
       {
-        url: "/icon-dark-32x32.png",
+        url: "/inventory-logo.png",
         media: "(prefers-color-scheme: dark)",
       },
       {
-        url: "/icon.svg",
+        url: "/inventory-logo.png",
         type: "image/svg+xml",
       },
     ],
-    apple: "/apple-icon.png",
+    apple: "/inventory-logo.png",
   },
 };
 

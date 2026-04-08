@@ -8,6 +8,7 @@ import { useAuth } from "@/providers";
 import { cn } from "@/lib/utils";
 import { accountItems, navItems } from "./constant/navItems";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
+import Image from "next/image";
 
 const shellClass =
   "w-64 bg-card border-border h-screen flex flex-col shrink-0";
@@ -19,7 +20,14 @@ function SidebarInner({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <>
       <div className="p-6 border-b border-border">
-        <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between gap-3">
+          <Image
+            src="/inventory-logo.png"
+            alt="Inventory Logo"
+            width={30}
+            height={30}
+            className="w-8 h-8"
+          />
           <h1 className="text-2xl font-bold bg-linear-to-br from-primary to-accent bg-clip-text text-transparent">
             Inventory
           </h1>
