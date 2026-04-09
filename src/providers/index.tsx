@@ -7,10 +7,10 @@ import {
   useCallback,
   useEffect,
   Suspense,
+  lazy,
 } from "react";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { AuthRole, LoginUser } from "@/types/user";
 import { AuthContextValue } from "@/types/authContextValue";
 import authApi from "@/services/api/auth";
@@ -20,6 +20,11 @@ import { showToast } from "@/utils/toastConfig";
 import { Toaster } from "react-hot-toast";
 
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
+const ReactQueryDevtools = lazy(() =>
+  import("@tanstack/react-query-devtools/production").then((module) => ({
+    default: module.ReactQueryDevtools,
+  })),
+);
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<LoginUser | null>(null);
@@ -147,7 +152,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
             {children}
             <Toaster />
           </AuthContext.Provider>
-          <ReactQueryDevtools initialIsOpen={false} />
+          <Suspense fallback={null}>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Suspense>
         </QueryClientProvider>
       </NuqsAdapter>
     </Suspense>
