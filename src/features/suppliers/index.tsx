@@ -22,6 +22,7 @@ import { useCreateSupplier } from "@/hooks/suppliers/useCreateSupplier";
 import { useGetAllSuppliers } from "@/hooks/suppliers/useGetAllSuppliers";
 import { useDeleteSupplier } from "@/hooks/suppliers/useDeleteSupplier";
 import { useUpdateSupplier } from "@/hooks/suppliers/useUpateSupplier";
+import { dateFormatter } from "@/utils/dateFormatter";
 
 const defaultFormValues: SupplierFormData = {
   name: "",
@@ -132,6 +133,7 @@ const Suppliers = () => {
               <th className="px-6 py-3 text-left font-semibold">Phone</th>
               <th className="px-6 py-3 text-left font-semibold">Address</th>
               <th className="px-6 py-3 text-left font-semibold">Status</th>
+              <th className="px-6 py-3 text-left font-semibold">Date</th>
               <th className="px-6 py-3 text-left font-semibold">Actions</th>
             </tr>
           </thead>
@@ -153,6 +155,9 @@ const Suppliers = () => {
                   </td>
                   <td className="px-6 py-4">
                     <Skeleton className="h-4 w-36" />
+                  </td>
+                  <td className="px-6 py-4">
+                    <Skeleton className="h-5 w-16" />
                   </td>
                   <td className="px-6 py-4">
                     <Skeleton className="h-5 w-16" />
@@ -195,6 +200,7 @@ const Suppliers = () => {
                       {supplier.is_active ? "Active" : "Inactive"}
                     </Badge>
                   </td>
+                  <td className="px-6 py-4">{dateFormatter(supplier.created_at)}</td>
                   <td className="px-6 py-4">
                     <div className="flex gap-2">
                       <Link href={`/suppliers/${supplier.id}`}>

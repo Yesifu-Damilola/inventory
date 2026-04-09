@@ -189,6 +189,9 @@ const StockMovements = () => {
                     <Skeleton className="h-4 w-32 max-w-full" />
                   </td>
                   <td className="px-6 py-4">
+                    <Skeleton className="h-4 w-32 max-w-full" />
+                  </td>
+                  <td className="px-6 py-4">
                     <Skeleton className="h-4 w-28" />
                   </td>
                 </tr>

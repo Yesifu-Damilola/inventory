@@ -43,6 +43,7 @@ import { useGetAllSuppliers } from "@/hooks/suppliers/useGetAllSuppliers";
 import type { CreateProductsPayload } from "@/types/products";
 import { showToast } from "@/utils/toastConfig";
 import Link from "next/link";
+import { dateFormatter } from "@/utils/dateFormatter";
 
 const SUPPLIER_NAMES_TO_HIDE = ["Olamide Sundat", "Gbenga Yesifu"];
 
@@ -89,7 +90,6 @@ const Products = () => {
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [showLowStockModal, setShowLowStockModal] = useState(false);
 
-  // ✅ FIXED: correct hook usage
   const { mutate: createProduct, isPending: isCreatingProduct } =
     useCreateProducts();
 
@@ -168,9 +168,7 @@ const Products = () => {
   const { mutate: updateProduct, isPending: isUpdatingProduct } =
     useUpdateProduct(editingId ?? "", closeModal);
   const { mutate: deleteProduct, isPending: isDeletingProduct } =
-    useDeleteProduct(deleteConfirm ? (deleteConfirm ?? "") : "", () =>
-      deleteConfirm ? setDeleteConfirm(null) : () => {},
-    );
+    useDeleteProduct(deleteConfirm ?? "", () => setDeleteConfirm(null));
 
   const onSubmit = (formValues: ProductFormData) => {
     const categoryId =
@@ -382,10 +380,17 @@ const Products = () => {
                 <tr>
                   <th className="px-6 py-3 text-left font-semibold">Name</th>
                   <th className="px-6 py-3 text-left font-semibold">SKU</th>
+                  <th className="px-6 py-3 text-left font-semibold">
+                    Category
+                  </th>
+                  <th className="px-6 py-3 text-left font-semibold">Unit</th>
                   <th className="px-6 py-3 text-left font-semibold">Cost</th>
+
                   <th className="px-6 py-3 text-left font-semibold">
                     Reorder Level
                   </th>
+                  <th className="px-6 py-3 text-left font-semibold">Status</th>
+                  <th className="px-6 py-3 text-left font-semibold">Date</th>
                   <th className="px-6 py-3 text-left font-semibold">Actions</th>
                 </tr>
               </thead>
@@ -401,10 +406,22 @@ const Products = () => {
                           <Skeleton className="h-5 w-28" />
                         </td>
                         <td className="px-6 py-4">
+                          <Skeleton className="h-5 w-24" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <Skeleton className="h-5 w-20" />
+                        </td>
+                        <td className="px-6 py-4">
                           <Skeleton className="h-5 w-16" />
                         </td>
                         <td className="px-6 py-4">
+                          <Skeleton className="h-5 w-14" />
+                        </td>
+                        <td className="px-6 py-4">
                           <Skeleton className="h-5 w-10" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <Skeleton className="h-5 w-16" />
                         </td>
                         <td className="px-6 py-4">
                           <div className="flex gap-2">
@@ -419,9 +436,30 @@ const Products = () => {
                         <td className="px-6 py-4">{product.name}</td>
                         <td className="px-6 py-4">{product.sku}</td>
                         <td className="px-6 py-4">
+                          {product.category_name || "-"}
+                        </td>
+                        <td className="px-6 py-4">
+                          {product.unit_name
+                            ? `${product.unit_name}${product.unit_abbreviation ? ` (${product.unit_abbreviation})` : ""}`
+                            : "-"}
+                        </td>
+                        <td className="px-6 py-4">
                           ${product.cost.toFixed(2)}
                         </td>
+
                         <td className="px-6 py-4">{product.reorder_level}</td>
+                        <td className="px-6 py-4">
+                          <Badge
+                            variant={
+                              product.is_active ? "default" : "secondary"
+                            }
+                          >
+                            {product.is_active ? "Active" : "Inactive"}
+                          </Badge>
+                        </td>
+                        <td className="px-6 py-4">
+                          {dateFormatter(product.created_at)}
+                        </td>
 
                         <td className="px-6 py-4 flex gap-2">
                           <Link href={`/products/${product.id}`}>
@@ -522,10 +560,7 @@ const Products = () => {
         title={editingId ? "Edit Product" : "Add Product"}
         className="max-w-[725px]"
       >
-        <form
-          onSubmit={handleSubmit(onSubmit)} // ✅ FIXED
-          className="space-y-4"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <Input placeholder="Name" {...register("name")} />
 
           <Input placeholder="SKU" {...register("sku")} />

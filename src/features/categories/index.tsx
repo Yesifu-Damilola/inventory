@@ -81,6 +81,7 @@ const Categories = () => {
   const columns = [
     { header: "Name", accessor: "name" },
     { header: "Description", accessor: "description" },
+    { header: "Products Count", accessor: "products_count" },
     { header: "Created", accessor: "created_at" },
   ] as const;
   const skeletonRows = Array.from({ length: 5 });

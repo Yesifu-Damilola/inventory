@@ -129,10 +129,16 @@ export interface ProductRow {
   sku: string;
   description: string;
   category_id: string;
+  category_name: string;
   unit_id: string;
+  unit_name: string;
+  unit_abbreviation: string;
   supplier_id: string;
   cost: number;
   reorder_level: number;
+  quantity_on_hand: number;
+  stock_last_updated_at: string | null;
+  is_active: boolean;
   created_at: string;
 }
 
