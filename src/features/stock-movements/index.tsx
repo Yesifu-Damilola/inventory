@@ -14,16 +14,13 @@ import {
   type StockMovementFormData,
 } from "@/schemas/stockMovementSchema";
 import { Controller, useForm } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
-import { getAllStockMovementQueryOptions } from "@/query/queryOptions/getAllStockMovement";
 import { useGetAllProducts } from "@/hooks/products/useGetAllProducts";
+import { useGetAllStockMovements } from "@/hooks/stockMovement/useGetAllStockMovements";
 import { dateFormatter } from "@/utils/dateFormatter";
 import type { Data as StockMovementRow } from "@/types/stockMovements";
 
 const StockMovements = () => {
-  const { data: stockMovements, isPending: isPendingStockMovements } = useQuery(
-    getAllStockMovementQueryOptions(),
-  );
+  const { stockMovements, isPendingStockMovements } = useGetAllStockMovements();
   const { products: productOptions, isPendingProducts } = useGetAllProducts({
     per_page: 10,
   });
@@ -197,7 +194,7 @@ const StockMovements = () => {
                 </tr>
               ))}
             {!isPendingStockMovements &&
-              stockMovements?.data?.map((movement: StockMovementRow) => (
+              stockMovements?.map((movement: StockMovementRow) => (
                 <tr
                   key={movement.id}
                   className="border-t border-border hover:bg-secondary/50"

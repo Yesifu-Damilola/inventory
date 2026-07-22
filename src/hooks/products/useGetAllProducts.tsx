@@ -40,5 +40,6 @@ export const useGetAllProducts = (params?: GetAllProductsParams) => {
   });
 
   return { products, isPendingProducts: isPending };
+
 };
 

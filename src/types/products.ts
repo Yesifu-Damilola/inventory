@@ -92,6 +92,7 @@ export interface Product {
   is_active: boolean;
   stock_level: StockLevel;
   suppliers: Supplier[];
+  created_at?: string;
 }
 
 export interface Category {

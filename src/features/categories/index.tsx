@@ -25,7 +25,7 @@ const Categories = () => {
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Create Category
-  const { isPending, onSubmit } = useCreateCategory();
+  const { onSubmit, isPending } = useCreateCategory();
   // Get All Categories
   const { categories: fetchedCategories, isPendingCategories } =
     useGetAllCategories();

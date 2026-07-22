@@ -44,5 +44,5 @@ export const useCreateCategory = () => {
     });
   };
 
-  return { isPending, onSubmit };
+  return { onSubmit, isPending };
 };

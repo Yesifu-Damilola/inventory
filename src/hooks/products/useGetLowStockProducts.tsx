@@ -3,11 +3,19 @@ import { useQuery } from "@tanstack/react-query";
 import { getLowStockProductsQueryOptions } from "@/query/queryOptions/getLowStockProducts";
 import type { LowStockProductRow, Product } from "@/types/products";
 
-type ProductsListResponse = Product[] | { data?: Product[] };
+type ProductsListResponse =
+  | Product[]
+  | { data?: Product[] }
+  | { data?: { data?: Product[] } };
 
 const normalizeProductsResponse = (response: ProductsListResponse): Product[] => {
   if (Array.isArray(response)) return response;
-  return Array.isArray(response.data) ? response.data : [];
+  if (!response) return [];
+  if (Array.isArray(response.data)) return response.data;
+  if (response.data && typeof response.data === "object" && Array.isArray((response.data as any).data)) {
+    return (response.data as any).data;
+  }
+  return [];
 };
 
 const toLowStockRows = (products: Product[]): LowStockProductRow[] =>
