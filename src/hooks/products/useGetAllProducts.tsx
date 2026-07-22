@@ -3,7 +3,11 @@ import { useQuery } from "@tanstack/react-query";
 import { GetAllProductsParams, productsApi } from "@/services/api/products";
 import type { Product, ProductRow } from "@/types/products";
 
-type ProductsListResponse = Product[] | { data?: Product[] };
+type ProductsListResponse =
+  | Product[]
+  | { data?: Product[] }
+  | { data?: { data?: Product[] } }
+  | any;
 
 const toProductRows = (products: Product[]): ProductRow[] =>
   products.map((product) => ({
@@ -27,7 +31,12 @@ const toProductRows = (products: Product[]): ProductRow[] =>
 
 const normalizeProductsResponse = (response: ProductsListResponse): Product[] => {
   if (Array.isArray(response)) return response;
-  return Array.isArray(response.data) ? response.data : [];
+  if (!response) return [];
+  if (Array.isArray(response.data)) return response.data;
+  if (response.data && typeof response.data === "object" && Array.isArray((response.data as any).data)) {
+    return (response.data as any).data;
+  }
+  return [];
 };
 
 export const useGetAllProducts = (params?: GetAllProductsParams) => {

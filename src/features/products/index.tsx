@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Plus, Trash2, Edit2, Eye, AlertTriangle } from "lucide-react";
+import { Plus, Trash2, Edit2, Eye, AlertTriangle, Lock } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import type { ProductRow } from "@/types/products";
@@ -282,6 +282,11 @@ const Products = () => {
           <p className="text-muted-foreground">
             Manage your inventory products
           </p>
+          {!isAdmin && (
+            <p className="text-sm text-muted-foreground mt-1 flex items-center gap-1">
+              <Lock className="w-4 h-4" /> Admin access required to manage products
+            </p>
+          )}
         </div>
 
         <div className="flex flex-wrap items-center justify-end gap-2">
@@ -307,16 +312,7 @@ const Products = () => {
         </div>
       </div>
 
-      {!isAdmin && (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4">
-          <p className="font-medium text-destructive">
-            Access denied. You don't have permission.
-          </p>
-        </div>
-      )}
-
       {/* TABLE */}
-      {isAdmin && (
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
             <Input
@@ -467,20 +463,28 @@ const Products = () => {
                               <Eye className="w-4 h-4" />
                             </Button>
                           </Link>
-                          <Button
-                            size="sm"
-                            onClick={() => handleOpenModal(product)}
-                          >
-                            <Edit2 className="w-4 h-4" />
-                          </Button>
+                          {isAdmin ? (
+                            <>
+                              <Button
+                                size="sm"
+                                onClick={() => handleOpenModal(product)}
+                              >
+                                <Edit2 className="w-4 h-4" />
+                              </Button>
 
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            onClick={() => setDeleteConfirm(product.id)}
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
+                              <Button
+                                size="sm"
+                                variant="destructive"
+                                onClick={() => setDeleteConfirm(product.id)}
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </>
+                          ) : (
+                            <span className="text-xs text-muted-foreground flex items-center gap-1">
+                              <Lock className="w-3 h-3" /> Admin only
+                            </span>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -488,7 +492,6 @@ const Products = () => {
             </table>
           </div>
         </div>
-      )}
 
       <Modal
         isOpen={isAdmin && showLowStockModal}
