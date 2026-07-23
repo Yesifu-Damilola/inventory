@@ -144,12 +144,6 @@ const StockMovements = () => {
                 Unit cost
               </th>
               <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">
-                Reference
-              </th>
-              <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">
-                Notes
-              </th>
-              <th className="px-6 py-3 text-left font-semibold whitespace-nowrap">
                 Date
               </th>
               <th className="px-6 py-3 text-right font-semibold whitespace-nowrap">
@@ -178,12 +172,6 @@ const StockMovements = () => {
                   </td>
                   <td className="px-6 py-4">
                     <Skeleton className="h-6 w-16 rounded-md" />
-                  </td>
-                  <td className="px-6 py-4">
-                    <Skeleton className="h-4 w-24" />
-                  </td>
-                  <td className="px-6 py-4">
-                    <Skeleton className="h-4 w-32 max-w-full" />
                   </td>
                   <td className="px-6 py-4">
                     <Skeleton className="h-4 w-32 max-w-full" />
@@ -233,12 +221,6 @@ const StockMovements = () => {
                     >
                       {formatMoney(movement.unit_cost)}
                     </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    {movement.reference_number ?? "—"}
-                  </td>
-                  <td className="px-6 py-4 text-sm text-muted-foreground">
-                    {movement.notes}
                   </td>
                   <td className="px-6 py-4">
                     {dateFormatter(movement.created_at)}

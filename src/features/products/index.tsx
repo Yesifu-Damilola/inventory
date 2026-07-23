@@ -313,185 +313,189 @@ const Products = () => {
       </div>
 
       {/* TABLE */}
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
-            <Input
-              placeholder="Search products..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {/* search filter */}
+          <Input
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
 
-            <Select
-              value={selectedCategoryId}
-              onValueChange={setSelectedCategoryId}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Filter by category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL_FILTER_VALUE}>All Categories</SelectItem>
-                {categories.map((c) => (
-                  <SelectItem key={c.id} value={c.id}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* category filter */}
+          <Select
+            value={selectedCategoryId}
+            onValueChange={setSelectedCategoryId}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Filter by category" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL_FILTER_VALUE}>All Categories</SelectItem>
+              {categories.map((c) => (
+                <SelectItem key={c.id} value={c.id}>
+                  {c.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-            <Select
-              value={selectedSupplierId}
-              onValueChange={setSelectedSupplierId}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Filter by supplier" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={ALL_FILTER_VALUE}>All Suppliers</SelectItem>
-                {suppliers.map((s) => (
-                  <SelectItem key={s.id} value={s.id}>
-                    {s.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          {/* supplier filter */}
+          <Select
+            value={selectedSupplierId}
+            onValueChange={setSelectedSupplierId}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Filter by supplier" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value={ALL_FILTER_VALUE}>All Suppliers</SelectItem>
+              {suppliers.map((s) => (
+                <SelectItem key={s.id} value={s.id}>
+                  {s.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-            <Select
-              value={String(perPage)}
-              onValueChange={(value) => setPerPage(Number(value))}
-            >
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Per page" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="10">10 per page</SelectItem>
-                <SelectItem value="25">25 per page</SelectItem>
-                <SelectItem value="50">50 per page</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="rounded-lg border border-border overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-secondary">
-                <tr>
-                  <th className="px-6 py-3 text-left font-semibold">Name</th>
-                  <th className="px-6 py-3 text-left font-semibold">SKU</th>
-                  <th className="px-6 py-3 text-left font-semibold">
-                    Category
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold">Unit</th>
-                  <th className="px-6 py-3 text-left font-semibold">Cost</th>
-
-                  <th className="px-6 py-3 text-left font-semibold">
-                    Reorder Level
-                  </th>
-                  <th className="px-6 py-3 text-left font-semibold">Status</th>
-                  <th className="px-6 py-3 text-left font-semibold">Date</th>
-                  <th className="px-6 py-3 text-left font-semibold">Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {isPendingProducts
-                  ? Array.from({ length: 8 }).map((_, i) => (
-                      <tr key={i} className="border-t">
-                        <td className="px-6 py-4">
-                          <Skeleton className="h-5 w-[min(100%,220px)] max-w-full" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <Skeleton className="h-5 w-28" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <Skeleton className="h-5 w-24" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <Skeleton className="h-5 w-20" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <Skeleton className="h-5 w-16" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <Skeleton className="h-5 w-14" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <Skeleton className="h-5 w-10" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <Skeleton className="h-5 w-16" />
-                        </td>
-                        <td className="px-6 py-4">
-                          <div className="flex gap-2">
-                            <Skeleton className="h-9 w-9 shrink-0 rounded-md" />
-                            <Skeleton className="h-9 w-9 shrink-0 rounded-md" />
-                          </div>
-                        </td>
-                      </tr>
-                    ))
-                  : products.map((product) => (
-                      <tr key={product.id} className="border-t">
-                        <td className="px-6 py-4">{product.name}</td>
-                        <td className="px-6 py-4">{product.sku}</td>
-                        <td className="px-6 py-4">
-                          {product.category_name || "-"}
-                        </td>
-                        <td className="px-6 py-4">
-                          {product.unit_name
-                            ? `${product.unit_name}${product.unit_abbreviation ? ` (${product.unit_abbreviation})` : ""}`
-                            : "-"}
-                        </td>
-                        <td className="px-6 py-4">
-                          ${product.cost.toFixed(2)}
-                        </td>
-
-                        <td className="px-6 py-4">{product.reorder_level}</td>
-                        <td className="px-6 py-4">
-                          <Badge
-                            variant={
-                              product.is_active ? "default" : "secondary"
-                            }
-                          >
-                            {product.is_active ? "Active" : "Inactive"}
-                          </Badge>
-                        </td>
-                        <td className="px-6 py-4">
-                          {dateFormatter(product.created_at)}
-                        </td>
-
-                        <td className="px-6 py-4 flex gap-2">
-                          <Link href={`/products/${product.id}`}>
-                            <Button variant="outline" size="sm">
-                              <Eye className="w-4 h-4" />
-                            </Button>
-                          </Link>
-                          {isAdmin ? (
-                            <>
-                              <Button
-                                size="sm"
-                                onClick={() => handleOpenModal(product)}
-                              >
-                                <Edit2 className="w-4 h-4" />
-                              </Button>
-
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => setDeleteConfirm(product.id)}
-                              >
-                                <Trash2 className="w-4 h-4" />
-                              </Button>
-                            </>
-                          ) : (
-                            <span className="text-xs text-muted-foreground flex items-center gap-1">
-                              <Lock className="w-3 h-3" /> Admin only
-                            </span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-              </tbody>
-            </table>
-          </div>
+          {/*per page filter*/}
+          <Select
+            value={String(perPage)}
+            onValueChange={(value) => setPerPage(Number(value))}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue placeholder="Per page" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">1 per page</SelectItem>
+              <SelectItem value="25">2 per page</SelectItem>
+              <SelectItem value="50">5 per page</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
+
+        <div className="rounded-lg border border-border overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-secondary">
+              <tr>
+                <th className="px-6 py-3 text-left font-semibold">Name</th>
+                <th className="px-6 py-3 text-left font-semibold">SKU</th>
+                <th className="px-6 py-3 text-left font-semibold">
+                  Category
+                </th>
+                <th className="px-6 py-3 text-left font-semibold">Unit</th>
+                <th className="px-6 py-3 text-left font-semibold">Cost</th>
+
+                <th className="px-6 py-3 text-left font-semibold">
+                  Reorder Level
+                </th>
+                <th className="px-6 py-3 text-left font-semibold">Status</th>
+                <th className="px-6 py-3 text-left font-semibold">Date</th>
+                <th className="px-6 py-3 text-left font-semibold">Actions</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {isPendingProducts
+                ? Array.from({ length: 8 }).map((_, i) => (
+                  <tr key={i} className="border-t">
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-[min(100%,220px)] max-w-full" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-28" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-24" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-20" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-16" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-14" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-10" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <Skeleton className="h-5 w-16" />
+                    </td>
+                    <td className="px-6 py-4">
+                      <div className="flex gap-2">
+                        <Skeleton className="h-9 w-9 shrink-0 rounded-md" />
+                        <Skeleton className="h-9 w-9 shrink-0 rounded-md" />
+                      </div>
+                    </td>
+                  </tr>
+                ))
+                : products.map((product) => (
+                  <tr key={product.id} className="border-t">
+                    <td className="px-6 py-4">{product.name}</td>
+                    <td className="px-6 py-4">{product.sku}</td>
+                    <td className="px-6 py-4">
+                      {product.category_name || "-"}
+                    </td>
+                    <td className="px-6 py-4">
+                      {product.unit_name
+                        ? `${product.unit_name}${product.unit_abbreviation ? ` (${product.unit_abbreviation})` : ""}`
+                        : "-"}
+                    </td>
+                    <td className="px-6 py-4">
+                      ${product.cost.toFixed(2)}
+                    </td>
+
+                    <td className="px-6 py-4">{product.reorder_level}</td>
+                    <td className="px-6 py-4">
+                      <Badge
+                        variant={
+                          product.is_active ? "default" : "secondary"
+                        }
+                      >
+                        {product.is_active ? "Active" : "Inactive"}
+                      </Badge>
+                    </td>
+                    <td className="px-6 py-4">
+                      {dateFormatter(product.created_at)}
+                    </td>
+
+                    <td className="px-6 py-4 flex gap-2">
+                      <Link href={`/products/${product.id}`}>
+                        <Button variant="outline" size="sm">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                      </Link>
+                      {isAdmin ? (
+                        <>
+                          <Button
+                            size="sm"
+                            onClick={() => handleOpenModal(product)}
+                          >
+                            <Edit2 className="w-4 h-4" />
+                          </Button>
+
+                          <Button
+                            size="sm"
+                            variant="destructive"
+                            onClick={() => setDeleteConfirm(product.id)}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </>
+                      ) : (
+                        <span className="text-xs text-muted-foreground flex items-center gap-1">
+                          <Lock className="w-3 h-3" /> Admin only
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
 
       <Modal
         isOpen={isAdmin && showLowStockModal}
