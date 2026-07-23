@@ -1,4 +1,4 @@
-import { GetDashboardRecentStockMovementsResponse, GetDashboardStatsResponse, GetDashboardTopCategoriesResponse } from "@/types/dashboard";
+import { GetDashboardRecentStockMovementsResponse, GetDashboardStatsResponse, GetDashboardTopCategoriesResponse, GetDashboardInventoryByCategoryResponse } from "@/types/dashboard";
 import { axiosPrivate } from "../axios/axiosPrivate";
 
 export const dashboardApi = {
@@ -18,8 +18,8 @@ export const dashboardApi = {
         return res.data;
     },
     // get inventory by category
-    getDashboardInventoryByCategory: async () => {
-        const res = await axiosPrivate.get("/dashboard/inventory-by-category");
+    getDashboardInventoryByCategory: async (): Promise<GetDashboardInventoryByCategoryResponse> => {
+        const res = await axiosPrivate.get<GetDashboardInventoryByCategoryResponse>("/dashboard/inventory-by-category");
         return res.data;
     }
 };

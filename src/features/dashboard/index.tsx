@@ -5,11 +5,11 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import DashboardCards from "./DashboardCards";
 import {
-  MOCK_TOP_CATEGORIES,
   QUICK_ACTIONS,
 } from "@/components/constant/dashboard";
 import RecentStockMovements from "./RecentStockMovements";
 import TopCategories from "./TopCategories";
+import InventoryByCategory from "./InventoryByCategory";
 
 
 
@@ -61,34 +61,10 @@ const Dashboard = () => {
       </div>
 
       {/* Inventory Breakdown */}
-      <Card className="p-6">
-        <h3 className="text-lg font-semibold mb-4">
-          Inventory Breakdown by Category
-        </h3>
-        <div className="space-y-3">
-          {MOCK_TOP_CATEGORIES.map((cat) => (
-            <div key={cat.category}>
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-sm font-medium">{cat.category}</span>
-                <span className="text-sm text-muted-foreground">
-                  ${cat.value.toLocaleString()}
-                </span>
-              </div>
-              <div className="h-2 bg-secondary rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-primary rounded-full"
-                  style={{ width: `${cat.percentage}%` }}
-                />
-              </div>
-              <span className="text-xs text-muted-foreground">
-                {cat.percentage}% of total
-              </span>
-            </div>
-          ))}
-        </div>
-      </Card>
+      <InventoryByCategory />
     </div>
   );
 };
 
 export default Dashboard;
+

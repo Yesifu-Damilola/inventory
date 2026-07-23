@@ -3,7 +3,7 @@ import { queryOptions } from "@tanstack/react-query";
 
 export const getReportsInventorySummaryQueryOptions = () => {
   return queryOptions({
-    queryKey: ["reports-inventory-summary"],
+    queryKey: ["reports-inventory-summary"],  
     queryFn: () => reportsApi.getInventorySummary(),
   });
 };

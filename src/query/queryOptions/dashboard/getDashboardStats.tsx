@@ -4,7 +4,7 @@ import { DASHBOARD_STATS_KEY } from "@/query/query-key/dashboard";
 
 export const getDashboardStatsQueryOptions = () => {
     return queryOptions({
-        queryKey: [DASHBOARD_STATS_KEY],
+        queryKey: [DASHBOARD_STATS_KEY, "stats"],
         queryFn: () => dashboardApi.getDashboardStats(),
     });
 };

@@ -56,15 +56,32 @@ export interface User {
 
 // Get Dashboard Top Categories
 export interface GetDashboardTopCategoriesResponse {
-  success: boolean
-  message: string
-  data: GetDashboardTopCategory[]
+    success: boolean
+    message: string
+    data: GetDashboardTopCategory[]
 }
 
 export interface GetDashboardTopCategory {
-  id: string
-  name: string
-  product_count: number
-  total_quantity: number
-  total_value: number
+    id: string
+    name: string
+    product_count: number
+    total_quantity: number
+    total_value: number
+}
+
+
+export interface GetDashboardInventoryByCategoryResponse {
+    success: boolean
+    message: string
+    data: GetDashboardInventoryByCategory[]
+}
+
+export interface GetDashboardInventoryByCategory {
+    id: string
+    name: string
+    total_products: number
+    active_products: number
+    total_quantity: number
+    total_value: number
+    low_stock_count: number
 }
