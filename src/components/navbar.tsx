@@ -15,7 +15,7 @@ export function Navbar({ onMenuClick }: NavbarProps) {
   const { data: user, isPending } = useMe();
 
   return (
-    <div className="h-16 bg-card border-b border-border flex items-center justify-between gap-3 px-4 pb-1.5 md:px-6">
+    <div className="sticky top-0 z-10 h-16 bg-card border-b border-border flex items-center justify-between gap-3 px-4 pb-1.5 md:px-6">
       <Button
         type="button"
         variant="ghost"

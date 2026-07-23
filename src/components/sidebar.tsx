@@ -153,7 +153,7 @@ export function Sidebar({ mobileOpen, onMobileOpenChange }: SidebarProps) {
         </SheetContent>
       </Sheet>
 
-      <aside className={cn(shellClass, "hidden md:flex border-r")}>
+      <aside className={cn(shellClass, "sticky top-0 hidden md:flex border-r")}>
         <SidebarInner />
       </aside>
     </>
